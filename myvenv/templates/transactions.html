@@ -1,0 +1,30 @@
+<!-- templates/transactions.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Transactions</h3>
+  <a href="{{ url_for('transaction_bp.add_transaction') }}" class="btn btn-success">+ Add Transaction</a>
+</div>
+
+<table class="table table-striped table-hover shadow-sm">
+  <thead class="table-dark">
+    <tr><th>ID</th><th>Type</th><th>Amount</th><th>Description</th><th>Student</th><th>Date</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+    {% for t in transactions %}
+    <tr>
+      <td>{{ t.id }}</td>
+      <td>{{ t.type }}</td>
+      <td>{{ t.amount }}</td>
+      <td>{{ t.description or '-' }}</td>
+      <td>{{ t.student.name if t.student else '-' }}</td>
+      <td>{{ t.date.strftime('%Y-%m-%d') }}</td>
+      <td>
+        <a href="{{ url_for('transaction_bp.edit_transaction', id=t.id) }}" class="btn btn-sm btn-secondary">Edit</a>
+        <a href="{{ url_for('transaction_bp.delete_transaction', id=t.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

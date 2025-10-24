@@ -1,0 +1,64 @@
+<!-- templates/dashboard.html -->
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-center mb-4">📊 Dashboard</h2>
+
+<div class="row text-center mb-4">
+  <div class="col-md-4">
+    <div class="card shadow border-success">
+      <div class="card-body">
+        <h5 class="card-title text-success">Total Income</h5>
+        <h3>{{ income }} ৳</h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card shadow border-danger">
+      <div class="card-body">
+        <h5 class="card-title text-danger">Total Expense</h5>
+        <h3>{{ expense }} ৳</h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card shadow border-primary">
+      <div class="card-body">
+        <h5 class="card-title text-primary">Balance</h5>
+        <h3>{{ balance }} ৳</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<canvas id="financeChart" height="100"></canvas>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const ctx = document.getElementById('financeChart');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ labels|tojson }},
+      datasets: [
+        {
+          label: 'Income',
+          data: {{ income_data|tojson }},
+          backgroundColor: 'rgba(75, 192, 192, 0.6)'
+        },
+        {
+          label: 'Expense',
+          data: {{ expense_data|tojson }},
+          backgroundColor: 'rgba(255, 99, 132, 0.6)'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Edit Teacher</h1>
+<form method="POST">
+  <div class="mb-3">
+    <label>Name</label>
+    <input type="text" name="name" class="form-control" value="{{ teacher.name }}" required>
+  </div>
+  <div class="mb-3">
+    <label>Salary</label>
+    <input type="number" name="salary" class="form-control" value="{{ teacher.salary }}" step="0.01" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Update</button>
+</form>
+{% endblock %}

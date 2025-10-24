@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Edit Student</h1>
+<form method="POST">
+  <div class="mb-3">
+    <label>Name</label>
+    <input type="text" name="name" class="form-control" value="{{ student.name }}" required>
+  </div>
+  <div class="mb-3">
+    <label>Course</label>
+    <input type="text" name="course" class="form-control" value="{{ student.course }}" required>
+  </div>
+  <div class="mb-3">
+    <label>Monthly Fee</label>
+    <input type="number" name="monthly_fee" class="form-control" value="{{ student.monthly_fee }}" step="0.01" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Update</button>
+</form>
+{% endblock %}
+

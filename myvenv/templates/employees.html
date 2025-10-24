@@ -1,0 +1,27 @@
+<!-- templates/employees.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Employees</h3>
+  <a href="{{ url_for('employee_bp.add_employee') }}" class="btn btn-primary">+ Add Employee</a>
+</div>
+
+<table class="table table-striped table-hover shadow-sm">
+  <thead class="table-dark">
+    <tr><th>ID</th><th>Name</th><th>Salary</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+    {% for e in employees %}
+    <tr>
+      <td>{{ e.id }}</td>
+      <td>{{ e.name }}</td>
+      <td>{{ e.salary }}</td>
+      <td>
+        <a href="{{ url_for('employee_bp.edit_employee', id=e.id) }}" class="btn btn-sm btn-secondary">Edit</a>
+        <a href="{{ url_for('employee_bp.delete_employee', id=e.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
