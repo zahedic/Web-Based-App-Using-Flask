@@ -17,9 +17,6 @@ def add_employee():
         e = Employee(name=name, salary=salary)
         db.session.add(e)
         db.session.commit()
-        tr = Transaction(type='expense', amount=salary, description=f'Salary paid to Employee {name}', employee_id=e.id)
-        db.session.add(tr)
-        db.session.commit()
         return redirect(url_for('employee_bp.employees'))
     return render_template('form.html', title='Add Employee', kind='employee')
 
@@ -30,18 +27,12 @@ def edit_employee(id):
         e.name = request.form.get('name')
         e.salary = float(request.form.get('salary') or 0)
         db.session.commit()
-        Transaction.query.filter(Transaction.employee_id==e.id).update({
-            Transaction.amount: e.salary,
-            Transaction.description: f'Salary paid to Employee {e.name}'
-        })
-        db.session.commit()
         return redirect(url_for('employee_bp.employees'))
     return render_template('form.html', title='Edit Employee', kind='employee', obj=e)
 
 @employee_bp.route('/delete/<int:id>')
 def delete_employee(id):
     e = Employee.query.get_or_404(id)
-    Transaction.query.filter(Transaction.employee_id==e.id).delete()
     db.session.delete(e)
     db.session.commit()
     return redirect(url_for('employee_bp.employees'))

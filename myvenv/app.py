@@ -98,12 +98,11 @@ def edit(kind, id):
                 obj.employee_id = int(eid) if eid else None
 
             db.session.commit()
-            flash(f'{kind.title()} updated successfully', 'success')
             return redirect(url_for('dashboard'))
         except ValueError:
             # e.g. invalid number in amount/salary
             db.session.rollback()
-            flash('Please enter valid numeric values for amount/salary/fee', 'danger')
+            
 
     # GET: render form with lists for selects (for transactions)
     students = Student.query.all()

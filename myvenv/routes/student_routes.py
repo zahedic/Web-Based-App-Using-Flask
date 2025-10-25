@@ -18,10 +18,6 @@ def add_student():
         s = Student(name=name, course=course, monthly_fee=fee)
         db.session.add(s)
         db.session.commit()
-        # add income transaction
-        tr = Transaction(type='income', amount=fee, description=f'{name} paid for {course}', student_id=s.id)
-        db.session.add(tr)
-        db.session.commit()
         return redirect(url_for('student_bp.students'))
     return render_template('form.html', title='Add Student', kind='student')
 
@@ -33,20 +29,13 @@ def edit_student(id):
         s.course = request.form.get('course')
         s.monthly_fee = float(request.form.get('monthly_fee') or 0)
         db.session.commit()
-        # update first income transaction for this student (if exists)
-        tr = Transaction.query.filter_by(student_id=s.id, type='income').first()
-        if tr:
-            tr.amount = s.monthly_fee
-            tr.description = f'{s.name} paid for {s.course}'
-            db.session.commit()
+        
         return redirect(url_for('student_bp.students'))
     return render_template('form.html', title='Edit Student', kind='student', obj=s)
 
 @student_bp.route('/delete/<int:id>')
 def delete_student(id):
     s = Student.query.get_or_404(id)
-    # delete related transactions
-    Transaction.query.filter_by(student_id=s.id).delete()
     db.session.delete(s)
     db.session.commit()
     return redirect(url_for('student_bp.students'))

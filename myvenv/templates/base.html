@@ -10,19 +10,19 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg bg-primary">
   <div class="container">
-    <a class="navbar-brand" href="{{ url_for('dashboard') }}">New Vision IT Ltd.</a>
+    <a class="navbar-brand text-white fw-bold" href="{{ url_for('dashboard') }}">New Vision IT Ltd.</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navMenu">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('student_bp.students') }}">Students</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('teacher_bp.teachers') }}">Teachers</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('employee_bp.employees') }}">Employees</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('transaction_bp.list_transactions') }}">Transactions</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{{ url_for('student_bp.students') }}">Students</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{{ url_for('teacher_bp.teachers') }}">Teachers</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{{ url_for('employee_bp.employees') }}">Employees</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{{ url_for('transaction_bp.list_transactions') }}">Transactions</a></li>
       </ul>
     </div>
   </div>
@@ -32,11 +32,45 @@
   {% block content %}{% endblock %}
 </div>
 
-<footer class="bg-light text-center py-3 mt-5">
-  <div class="container">
-    <small>© 2025 New Vision IT Ltd. — Developed by ICON COMPUTER TECHNOLOGY</small>
-  </div>
-</footer>
+<!-- ======== FOOTER ======== -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5 class="fw-bold">About</h5>
+                    <p class="small text-secondary">
+                         NVIT (New Vision Information Technology Limited) is the Largest, Most Experienced & Global Standard IT Service provider and Computer Training Company in Chattogram, Bangladesh. NVIT started its journey in 2001 with the USA Based franchise network New Horizons CLC. Right Now, NVIT is the largest & Independent IT training Company in Chattogram and Bangladesh.
+                    </p>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5 class="fw-bold">Quick Links</h5>
+                    <ul class="list-unstyled small">
+                        <li><a href="{{ url_for('dashboard') }}" class="text-decoration-none text-secondary">Dashboard</a></li>
+                        
+                        <li><a href="{{ url_for('student_bp.students') }}" class="text-decoration-none text-secondary">Students</a></li>
+
+                        <li><a href="{{ url_for('teacher_bp.teachers') }}" class="text-decoration-none text-secondary">Teachers</a></li>
+
+
+                         <li><a href="{{ url_for('employee_bp.employees') }}" class="text-decoration-none text-secondary">Employees</a></li>
+
+
+                        <li><a href="{{ url_for('transaction_bp.list_transactions') }}" class="text-decoration-none text-secondary">Transactions
+                        </a></li>
+                       
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="fw-bold">Contact</h5>
+                    <p class="small text-secondary mb-1">📞 +880 1777586999</p>
+                    <p class="small text-secondary mb-1">📧 info@nvit.com.bd</p>
+                    <p class="small text-secondary">🌐 <a href="https://www.facebook.com/newhorizons.chittagong" class="text-secondary text-decoration-none">NEW VISION INFORMATION TECHNOLOGY LTD</a></p>
+                </div>
+            </div>
+            <hr class="border-secondary">
+            <p class="small mb-0 text-secondary">&copy; NEW VISION IT LTD(NVIT). Developed by Zahedul Islam Chowdhdury </p>
+        </div>
+    </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

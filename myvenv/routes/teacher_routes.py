@@ -17,10 +17,7 @@ def add_teacher():
         t = Teacher(name=name, salary=salary)
         db.session.add(t)
         db.session.commit()
-        # add expense transaction
-        tr = Transaction(type='expense', amount=salary, description=f'Salary paid to Teacher {name}', teacher_id=t.id)
-        db.session.add(tr)
-        db.session.commit()
+    
         return redirect(url_for('teacher_bp.teachers'))
     return render_template('form.html', title='Add Teacher', kind='teacher')
 
@@ -32,19 +29,12 @@ def edit_teacher(id):
         t.name = request.form.get('name')
         t.salary = float(request.form.get('salary') or 0)
         db.session.commit()
-        # update related expense transaction(s) for this teacher (simple heuristic)
-        Transaction.query.filter(Transaction.teacher_id==t.id).update({
-            Transaction.amount: t.salary,
-            Transaction.description: f'Salary paid to Teacher {t.name}'
-        })
-        db.session.commit()
         return redirect(url_for('teacher_bp.teachers'))
     return render_template('form.html', title='Edit Teacher', kind='teacher', obj=t)
 
 @teacher_bp.route('/delete/<int:id>')
 def delete_teacher(id):
     t = Teacher.query.get_or_404(id)
-    Transaction.query.filter(Transaction.teacher_id==t.id).delete()
     db.session.delete(t)
     db.session.commit()
     return redirect(url_for('teacher_bp.teachers'))
