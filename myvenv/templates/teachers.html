@@ -2,26 +2,31 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h3>Teachers</h3>
-  <a href="{{ url_for('teacher_bp.add_teacher') }}" class="btn btn-primary">+ Add Teacher</a>
+  <h2>Teachers</h2>
+  <a class="btn btn-success" href="{{ url_for('teacher_bp.add_teacher') }}">+ Add Teacher</a>
 </div>
 
-<table class="table table-striped table-hover shadow-sm">
-  <thead class="table-dark">
-    <tr><th>ID</th><th>Name</th><th>Salary</th><th>Actions</th></tr>
-  </thead>
+<form class="d-flex mb-3" method="get" action="{{ url_for('teacher_bp.search_teacher') }}">
+  <input class="form-control me-2" type="search" name="q" placeholder="Search by name" value="{{ q if q else '' }}">
+  <button class="btn btn-outline-primary">Search</button>
+</form>
+
+<table class="table table-striped table-hover">
+  <thead class="table-dark"><tr><th>ID</th><th>Name</th><th>Salary</th><th>Actions</th></tr></thead>
   <tbody>
-    {% for t in teachers %}
+  {% for t in teachers %}
     <tr>
       <td>{{ t.id }}</td>
       <td>{{ t.name }}</td>
       <td>{{ t.salary }}</td>
       <td>
-        <a href="{{ url_for('teacher_bp.edit_teacher', id=t.id) }}" class="btn btn-sm btn-secondary">Edit</a>
-        <a href="{{ url_for('teacher_bp.delete_teacher', id=t.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Delete</a>
+        <a class="btn btn-sm btn-warning" href="{{ url_for('teacher_bp.edit_teacher', id=t.id) }}">Edit</a>
+        <a class="btn btn-sm btn-danger" href="{{ url_for('teacher_bp.delete_teacher', id=t.id) }}" onclick="return confirm('Delete this teacher?')">Delete</a>
       </td>
     </tr>
-    {% endfor %}
+  {% endfor %}
   </tbody>
 </table>
 {% endblock %}
+
+
