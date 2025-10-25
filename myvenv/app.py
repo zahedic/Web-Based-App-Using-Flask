@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,request,flash,redirect,url_for
 from models import db, Student, Teacher, Employee, Transaction
 from routes.student_routes import student_bp
 from routes.teacher_routes import teacher_bp
@@ -47,40 +47,78 @@ def dashboard():
                            income_data=income_data,
                            expense_data=expense_data)
 
-# Seed default data (runs only if tables empty)
-def seed_data():
-    if not Student.query.first():
-        s1 = Student(name="Awad Islam Chowdhury", course="Python", monthly_fee=5000)
-        s2 = Student(name="Zawad Islam Chowdhury", course="Django", monthly_fee=6000)
-        db.session.add_all([s1, s2])
-        db.session.commit()
-        db.session.add_all([
-            Transaction(type='income', amount=s1.monthly_fee, description=f'{s1.name} paid for {s1.course}', student_id=s1.id),
-            Transaction(type='income', amount=s2.monthly_fee, description=f'{s2.name} paid for {s2.course}', student_id=s2.id)
-        ])
-        db.session.commit()
+@app.route('/edit/<kind>/<int:id>', methods=['GET', 'POST'])
+def edit(kind, id):
+    # load object by kind
+    obj = None
+    if kind == 'student':
+        obj = Student.query.get_or_404(id)
+    elif kind == 'teacher':
+        obj = Teacher.query.get_or_404(id)
+    elif kind == 'employee':
+        obj = Employee.query.get_or_404(id)
+    elif kind == 'transaction':
+        obj = Transaction.query.get_or_404(id)
+    else:
+        flash('Unknown kind', 'danger')
+        return redirect(url_for('dashboard'))
 
-    if not Teacher.query.first():
-        t1 = Teacher(name="Mr. Hasan", salary=8000)
-        t2 = Teacher(name="Mrs. Fatema", salary=8500)
-        db.session.add_all([t1, t2])
-        db.session.commit()
-        db.session.add_all([
-            Transaction(type='expense', amount=t1.salary, description=f'Salary paid to Teacher {t1.name}', teacher_id=t1.id),
-            Transaction(type='expense', amount=t2.salary, description=f'Salary paid to Teacher {t2.name}', teacher_id=t2.id)
-        ])
-        db.session.commit()
+    # POST: update fields (use request.form.get to avoid KeyError)
+    if request.method == 'POST':
+        try:
+            if kind == 'student':
+                obj.name = request.form.get('name', obj.name)
+                obj.course = request.form.get('course', obj.course)
+                fee = request.form.get('monthly_fee', '')
+                obj.monthly_fee = float(fee) if fee.strip() != '' else None
 
-    if not Employee.query.first():
-        e1 = Employee(name="Rahim", salary=4000)
-        e2 = Employee(name="Karina", salary=4500)
-        db.session.add_all([e1, e2])
-        db.session.commit()
-        db.session.add_all([
-            Transaction(type='expense', amount=e1.salary, description=f'Salary paid to Employee {e1.name}', employee_id=e1.id),
-            Transaction(type='expense', amount=e2.salary, description=f'Salary paid to Employee {e2.name}', employee_id=e2.id)
-        ])
-        db.session.commit()
+            elif kind == 'teacher':
+                obj.name = request.form.get('name', obj.name)
+                sal = request.form.get('salary', '')
+                obj.salary = float(sal) if sal.strip() != '' else None
+
+            elif kind == 'employee':
+                obj.name = request.form.get('name', obj.name)
+                sal = request.form.get('salary', '')
+                obj.salary = float(sal) if sal.strip() != '' else None
+
+            elif kind == 'transaction':
+                obj.type = request.form.get('type', obj.type)
+                amt = request.form.get('amount', '')
+                obj.amount = float(amt) if amt.strip() != '' else 0.0
+                obj.description = request.form.get('description', obj.description)
+
+                # student/teacher/employee ids might be empty string -> convert to None
+                sid = request.form.get('student_id') or None
+                tid = request.form.get('teacher_id') or None
+                eid = request.form.get('employee_id') or None
+
+                obj.student_id = int(sid) if sid else None
+                obj.teacher_id = int(tid) if tid else None
+                obj.employee_id = int(eid) if eid else None
+
+            db.session.commit()
+            flash(f'{kind.title()} updated successfully', 'success')
+            return redirect(url_for('dashboard'))
+        except ValueError:
+            # e.g. invalid number in amount/salary
+            db.session.rollback()
+            flash('Please enter valid numeric values for amount/salary/fee', 'danger')
+
+    # GET: render form with lists for selects (for transactions)
+    students = Student.query.all()
+    teachers = Teacher.query.all()
+    employees = Employee.query.all()
+
+    return render_template(
+        'form.html',
+        title=f'Edit {kind.title()}',
+        kind=kind,
+        obj=obj,
+        students=students,
+        teachers=teachers,
+        employees=employees
+    )
 
 if __name__ == '__main__':
     with app.app_context():

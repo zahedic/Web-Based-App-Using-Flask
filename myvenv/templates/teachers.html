@@ -20,7 +20,7 @@
       <td>{{ t.name }}</td>
       <td>{{ t.salary }}</td>
       <td>
-        <a class="btn btn-sm btn-warning" href="{{ url_for('teacher_bp.edit_teacher', id=t.id) }}">Edit</a>
+        <a class="btn btn-sm btn-warning" href="{{ url_for('edit',kind='teacher', id=t.id) }}">Edit</a>
         <a class="btn btn-sm btn-danger" href="{{ url_for('teacher_bp.delete_teacher', id=t.id) }}" onclick="return confirm('Delete this teacher?')">Delete</a>
       </td>
     </tr>

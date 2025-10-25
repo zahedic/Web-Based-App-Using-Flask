@@ -29,7 +29,7 @@
       <td>{{ t.employee.name if t.employee else '-' }}</td>
       <td>{{ t.date.strftime('%Y-%m-%d') }}</td>
       <td>
-        <a class="btn btn-sm btn-warning" href="{{ url_for('transaction_bp.edit_transaction', id=t.id) }}">Edit</a>
+        <a class="btn btn-sm btn-warning" href="{{ url_for('edit',kind="transaction", id=t.id) }}">Edit</a>
         <a class="btn btn-sm btn-danger" href="{{ url_for('transaction_bp.delete_transaction', id=t.id) }}" onclick="return confirm('Delete this transaction?')">Delete</a>
       </td>
     </tr>

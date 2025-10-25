@@ -1,94 +1,116 @@
-<!-- templates/form.html -->
 {% extends "base.html" %}
 {% block content %}
-<h2 class="mb-3">{{ title }}</h2>
 
-<form method="POST">
-  {% if kind == 'student' %}
-    <div class="mb-3">
-      <label class="form-label">Name</label>
-      <input type="text" name="name" class="form-control" required value="{{ obj.name if obj else '' }}">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Course</label>
-      <input type="text" name="course" class="form-control" value="{{ obj.course if obj else '' }}">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Monthly Fee</label>
-      <input type="number" step="0.01" name="monthly_fee" class="form-control" value="{{ obj.monthly_fee if obj else '' }}">
-    </div>
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">{{ title }}</h2>
 
-  {% elif kind == 'teacher' %}
-    <div class="mb-3">
-      <label class="form-label">Name</label>
-      <input type="text" name="name" class="form-control" required value="{{ obj.name if obj else '' }}">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Salary</label>
-      <input type="number" step="0.01" name="salary" class="form-control" value="{{ obj.salary if obj else '' }}">
-    </div>
+  <div class="card shadow-sm p-4">
+    <form method="POST">
+      {% if kind == 'student' %}
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" name="name" class="form-control" required value="{{ obj.name if obj else '' }}">
+        </div>
 
-  {% elif kind == 'employee' %}
-    <div class="mb-3">
-      <label class="form-label">Name</label>
-      <input type="text" name="name" class="form-control" required value="{{ obj.name if obj else '' }}">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Salary</label>
-      <input type="number" step="0.01" name="salary" class="form-control" value="{{ obj.salary if obj else '' }}">
-    </div>
+        <div class="mb-3">
+          <label class="form-label">Course</label>
+          <input type="text" name="course" class="form-control" value="{{ obj.course if obj else '' }}">
+        </div>
 
-  {% elif kind == 'transaction' %}
-    <div class="mb-3">
-      <label class="form-label">Type</label>
-      <select name="type" class="form-select">
-        <option value="income" {% if obj and obj.type=='income' %}selected{% endif %}>Income</option>
-        <option value="expense" {% if obj and obj.type=='expense' %}selected{% endif %}>Expense</option>
-      </select>
-    </div>
+        <div class="mb-3">
+          <label class="form-label">Monthly Fee</label>
+          <input type="number" step="0.01" name="monthly_fee" class="form-control" value="{{ obj.monthly_fee if obj else '' }}">
+        </div>
 
-    <div class="mb-3">
-      <label class="form-label">Amount</label>
-      <input type="number" step="0.01" name="amount" class="form-control" value="{{ obj.amount if obj else '' }}">
-    </div>
+      {% elif kind == 'teacher' %}
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" name="name" class="form-control" required value="{{ obj.name if obj else '' }}">
+        </div>
 
-    <div class="mb-3">
-      <label class="form-label">Description</label>
-      <input type="text" name="description" class="form-control" value="{{ obj.description if obj else '' }}">
-    </div>
+        <div class="mb-3">
+          <label class="form-label">Salary</label>
+          <input type="number" step="0.01" name="salary" class="form-control" value="{{ obj.salary if obj else '' }}">
+        </div>
 
-    <div class="mb-3">
-      <label class="form-label">Student (optional)</label>
-      <select name="student_id" class="form-select">
-        <option value="">-- None --</option>
-        {% for s in students %}
-          <option value="{{ s.id }}" {% if obj and obj.student_id==s.id %}selected{% endif %}>{{ s.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
+      {% elif kind == 'employee' %}
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" name="name" class="form-control" required value="{{ obj.name if obj else '' }}">
+        </div>
 
-    <div class="mb-3">
-      <label class="form-label">Teacher (optional)</label>
-      <select name="teacher_id" class="form-select">
-        <option value="">-- None --</option>
-        {% for t in teachers %}
-          <option value="{{ t.id }}" {% if obj and obj.teacher_id==t.id %}selected{% endif %}>{{ t.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
+        <div class="mb-3">
+          <label class="form-label">Salary</label>
+          <input type="number" step="0.01" name="salary" class="form-control" value="{{ obj.salary if obj else '' }}">
+        </div>
 
-    <div class="mb-3">
-      <label class="form-label">Employee (optional)</label>
-      <select name="employee_id" class="form-select">
-        <option value="">-- None --</option>
-        {% for e in employees %}
-          <option value="{{ e.id }}" {% if obj and obj.employee_id==e.id %}selected{% endif %}>{{ e.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
-  {% endif %}
+      {% elif kind == 'transaction' %}
+        <div class="mb-3">
+          <label class="form-label">Type</label>
+          <select name="type" class="form-select">
+            <option value="income" {% if obj and obj.type == 'income' %}selected{% endif %}>Income</option>
+            <option value="expense" {% if obj and obj.type == 'expense' %}selected{% endif %}>Expense</option>
+          </select>
+        </div>
 
-  <button class="btn btn-primary">Save</button>
-  <a class="btn btn-secondary ms-2" href="{{ url_for('dashboard') }}">Cancel</a>
-</form>
+        <div class="mb-3">
+          <label class="form-label">Amount</label>
+          <input type="number" step="0.01" name="amount" class="form-control"
+                 value="{{ obj.amount if obj and obj.amount is not none else '' }}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <input type="text" name="description" class="form-control"
+                 value="{{ obj.description if obj else '' }}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Student (optional)</label>
+          <select name="student_id" class="form-select">
+            <option value="">-- None --</option>
+            {% for s in students %}
+              <option value="{{ s.id }}"
+                {% if obj and obj.student_id is not none and (obj.student_id|int == s.id|int) %}selected{% endif %}>
+                {{ s.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Teacher (optional)</label>
+          <select name="teacher_id" class="form-select">
+            <option value="">-- None --</option>
+            {% for t in teachers %}
+              <option value="{{ t.id }}"
+                {% if obj and obj.teacher_id is not none and (obj.teacher_id|int == t.id|int) %}selected{% endif %}>
+                {{ t.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Employee (optional)</label>
+          <select name="employee_id" class="form-select">
+            <option value="">-- None --</option>
+            {% for e in employees %}
+              <option value="{{ e.id }}"
+                {% if obj and obj.employee_id is not none and (obj.employee_id|int == e.id|int) %}selected{% endif %}>
+                {{ e.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+
+      <div class="d-flex justify-content-center gap-2 mt-4">
+        <button class="btn btn-primary px-4" type="submit">💾 Save</button>
+        <a class="btn btn-secondary px-4" href="{{ url_for('dashboard') }}">↩ Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
 {% endblock %}

@@ -21,7 +21,7 @@
       <td>{{ s.course or '-' }}</td>
       <td>{{ s.monthly_fee or 0 }}</td>
       <td>
-        <a class="btn btn-sm btn-warning" href="{{ url_for('student_bp.edit_student', id=s.id) }}">Edit</a>
+        <a class="btn btn-sm btn-warning" href="{{ url_for('edit',kind='student', id=s.id) }}">Edit</a>
         <a class="btn btn-sm btn-danger" href="{{ url_for('student_bp.delete_student', id=s.id) }}" onclick="return confirm('Delete this student?')">Delete</a>
       </td>
     </tr>
