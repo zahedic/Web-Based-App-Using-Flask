@@ -16,27 +16,33 @@ def add_transaction():
     employees = Employee.query.all()
 
     if request.method == 'POST':
-        t_type = request.form['type']
+        type_ = request.form['type']
         amount = float(request.form['amount'])
         description = request.form['description']
+
         student_id = request.form.get('student_id') or None
         teacher_id = request.form.get('teacher_id') or None
         employee_id = request.form.get('employee_id') or None
 
+        selected = [bool(student_id), bool(teacher_id), bool(employee_id)]
+        if sum(selected) > 1:
+            flash("Please select only one: Student OR Teacher OR Employee", "danger")
+            return redirect(url_for('transaction_bp.add_transaction'))
+
         transaction = Transaction(
-            type=t_type,
+            type=type_,
             amount=amount,
             description=description,
             date=datetime.utcnow(),
-            student_id=student_id,
-            teacher_id=teacher_id,
-            employee_id=employee_id
+            student_id=int(student_id) if student_id else None,
+            teacher_id=int(teacher_id) if teacher_id else None,
+            employee_id=int(employee_id) if employee_id else None
         )
         db.session.add(transaction)
         db.session.commit()
         return redirect(url_for('transaction_bp.list_transactions'))
 
-    return render_template('form.html', action='Add',kind='transaction', students=students, teachers=teachers, employees=employees)
+    return render_template('form.html', action='Add', kind='transaction', students=students, teachers=teachers, employees=employees)
 
 @transaction_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_transaction(id):
@@ -55,8 +61,7 @@ def edit_transaction(id):
         db.session.commit()
         return redirect(url_for('transaction_bp.list_transactions'))
 
-    return render_template('form.html', action='Edit',kind='transaction', transaction=transaction,
-                           students=students, teachers=teachers, employees=employees)
+    return render_template('form.html', action='Edit',kind='transaction', transaction=transaction, students=students, teachers=teachers, employees=employees)
 
 @transaction_bp.route('/delete/<int:id>')
 def delete_transaction(id):
@@ -70,3 +75,4 @@ def search_transaction():
     q = request.args.get('q','').strip()
     transaction = Transaction.query.filter(Transaction.name.contains(q)).all() if q else Transaction.query.all()
     return render_template('students.html', transaction=transaction, q=q)
+

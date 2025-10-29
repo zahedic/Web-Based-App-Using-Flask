@@ -113,4 +113,31 @@
   </div>
 </div>
 
+
+
+<!-- 🔹 Script: Prevent selecting more than one (Student, Teacher, Employee) -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const studentSelect = document.querySelector('select[name="student_id"]');
+  const teacherSelect = document.querySelector('select[name="teacher_id"]');
+  const employeeSelect = document.querySelector('select[name="employee_id"]');
+
+  function disableOthers(activeSelect) {
+    const selects = [studentSelect, teacherSelect, employeeSelect];
+    if (activeSelect.value) {
+      selects.forEach(sel => {
+        if (sel !== activeSelect) sel.disabled = true;
+      });
+    } else {
+      selects.forEach(sel => sel.disabled = false);
+    }
+  }
+
+  studentSelect?.addEventListener('change', () => disableOthers(studentSelect));
+  teacherSelect?.addEventListener('change', () => disableOthers(teacherSelect));
+  employeeSelect?.addEventListener('change', () => disableOthers(employeeSelect));
+});
+</script>
+
+
 {% endblock %}
