@@ -1,11 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
 
+<!---------- Main container with top margin for spacing ---------->
 <div class="container mt-4">
+
+   <!-- Page title dynamically  -->
   <h2 class="mb-4 text-center">{{ title }}</h2>
 
+  <!--  Card wrapper: Adds shadow, padding, and rounded edges for better UI -->
   <div class="card shadow-sm p-4">
+
+    <!-- Main Form: Method POST for creating/updating records -->
     <form method="POST">
+
+      <!-- ============================
+               STUDENT FORM SECTION
+           ============================ -->
       {% if kind == 'student' %}
         <div class="mb-3">
           <label class="form-label">Name</label>
@@ -22,6 +32,9 @@
           <input type="number" step="0.01" name="monthly_fee" class="form-control" value="{{ obj.monthly_fee if obj else '' }}">
         </div>
 
+        <!-- ============================
+                TEACHER FORM SECTION
+           ============================ -->
       {% elif kind == 'teacher' %}
         <div class="mb-3">
           <label class="form-label">Name</label>
@@ -33,6 +46,10 @@
           <input type="number" step="0.01" name="salary" class="form-control" value="{{ obj.salary if obj else '' }}">
         </div>
 
+
+          <!-- ============================
+                 EMPLOYEE FORM SECTION
+           ============================ -->
       {% elif kind == 'employee' %}
         <div class="mb-3">
           <label class="form-label">Name</label>
@@ -44,6 +61,9 @@
           <input type="number" step="0.01" name="salary" class="form-control" value="{{ obj.salary if obj else '' }}">
         </div>
 
+        <!-- ============================
+               TRANSACTION FORM SECTION
+           ============================ -->
       {% elif kind == 'transaction' %}
         <div class="mb-3">
           <label class="form-label">Type</label>
@@ -53,18 +73,22 @@
           </select>
         </div>
 
+
+        <!-- Amount input with decimal support -->
         <div class="mb-3">
           <label class="form-label">Amount</label>
           <input type="number" step="0.01" name="amount" class="form-control"
                  value="{{ obj.amount if obj and obj.amount is not none else '' }}">
         </div>
 
+        <!-- Description input -->
         <div class="mb-3">
           <label class="form-label">Description</label>
           <input type="text" name="description" class="form-control"
                  value="{{ obj.description if obj else '' }}">
         </div>
 
+         <!-- Optional links to Student, Teacher, or Employee -->
         <div class="mb-3">
           <label class="form-label">Student (optional)</label>
           <select name="student_id" class="form-select">
@@ -105,6 +129,10 @@
         </div>
       {% endif %}
 
+
+          <!-- ============================
+                  FORM ACTION BUTTONS
+           ============================ -->
       <div class="d-flex justify-content-center gap-2 mt-4">
         <button class="btn btn-primary px-4" type="submit">💾 Save</button>
         <a class="btn btn-secondary px-4" href="{{ url_for('dashboard') }}">↩ Cancel</a>
@@ -115,13 +143,23 @@
 
 
 
-<!-- 🔹 Script: Prevent selecting more than one (Student, Teacher, Employee) -->
+
+  <!-- ============================
+     JAVASCRIPT: Prevent selecting more than one
+     (Student, Teacher, Employee)
+     ============================ -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const studentSelect = document.querySelector('select[name="student_id"]');
   const teacherSelect = document.querySelector('select[name="teacher_id"]');
   const employeeSelect = document.querySelector('select[name="employee_id"]');
 
+  /**
+   * Function: disable others
+   * Ensures that only one of Student, Teacher, or Employee can be selected at a time.
+   * If a value is chosen in one dropdown, the other two are disabled.
+   * If the selection is cleared, all dropdowns are enabled again.
+   */
   function disableOthers(activeSelect) {
     const selects = [studentSelect, teacherSelect, employeeSelect];
     if (activeSelect.value) {
@@ -132,7 +170,8 @@ document.addEventListener('DOMContentLoaded', function() {
       selects.forEach(sel => sel.disabled = false);
     }
   }
-
+  
+ // Add change event listeners to all three selects
   studentSelect?.addEventListener('change', () => disableOthers(studentSelect));
   teacherSelect?.addEventListener('change', () => disableOthers(teacherSelect));
   employeeSelect?.addEventListener('change', () => disableOthers(employeeSelect));

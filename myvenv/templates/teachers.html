@@ -1,24 +1,45 @@
-<!-- templates/teachers.html -->
+<!-------------------------- templates/teachers.html -------------------------->
+ {# ------ Inheriting Base Layout ------- #}
 {% extends "base.html" %}
+
+{# -------------------------- Main Content Block Starts -------------------------- #}
 {% block content %}
+
+<!-- ======= Page Header Section ======= -->
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2>Teachers</h2>
   <a class="btn btn-success" href="{{ url_for('teacher_bp.add_teacher') }}">+ Add Teacher</a>
 </div>
 
+<!-- ======= Search Form Section ======= -->
 <form class="d-flex mb-3" method="get" action="{{ url_for('teacher_bp.search_teacher') }}">
   <input class="form-control me-2" type="search" name="q" placeholder="Search by name" value="{{ q if q else '' }}">
   <button class="btn btn-outline-primary">Search</button>
 </form>
 
+
+<!-- ======= Teacher Table Section ======= -->
 <table class="table table-striped table-hover">
-  <thead class="table-dark"><tr><th>ID</th><th>Name</th><th>Salary</th><th>Actions</th></tr></thead>
+
+  <!-- Table Header -->
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Salary</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <!-- Table Body -->
   <tbody>
   {% for t in teachers %}
     <tr>
       <td>{{ t.id }}</td>
       <td>{{ t.name }}</td>
       <td>{{ t.salary }}</td>
+
+       <!-- Action Buttons: Edit and Delete -->
       <td>
         <a class="btn btn-sm btn-warning" href="{{ url_for('edit',kind='teacher', id=t.id) }}">Edit</a>
         <a class="btn btn-sm btn-danger" href="{{ url_for('teacher_bp.delete_teacher', id=t.id) }}" onclick="return confirm('Delete this teacher?')">Delete</a>

@@ -1,11 +1,27 @@
+
+  <!-- ======================== dashboard.html  ======================== -->
+   <!-- ========================
+    The page displays:
+     - Inheritance: base.html file 
+     - Total Income, Total Expense, and Net Balance summary cards
+     - A financial comparison chart (Income vs Expense) using Chart.js
+     
+    ======================== -->
+
+
 {% extends "base.html" %}
 {% block content %}
+
+<!-- ====================== Dashboard Container ====================== -->
 <div class="container py-4">
 
+  <!-- ====================== Dashboard Title ====================== -->
   <h2 class="mb-4 text-center fw-bold text-primary">📊 Dashboard - New Vision IT Ltd.</h2>
 
-  <!-- Summary Cards -->
+    <!-- ====================== Summary Cards Section ====================== -->
   <div class="row g-4 mb-5">
+
+      <!-- ---------- Total Income Card ---------- -->
     <div class="col-md-4">
       <div class="card border-success shadow-lg h-100">
         <div class="card-body text-center">
@@ -14,6 +30,8 @@
         </div>
       </div>
     </div>
+
+    <!-- ---------- Total Expense Card ---------- -->
     <div class="col-md-4">
       <div class="card border-danger shadow-lg h-100">
         <div class="card-body text-center">
@@ -22,6 +40,8 @@
         </div>
       </div>
     </div>
+
+     <!-- ---------- Net Balance Card ---------- -->
     <div class="col-md-4">
       <div class="card border-primary shadow-lg h-100">
         <div class="card-body text-center">
@@ -31,8 +51,10 @@
       </div>
     </div>
   </div>
+<!-- ====================== End of Summary Cards ====================== -->
 
-  <!-- Column Chart -->
+
+    <!-- ====================== Chart Section ====================== -->
   <div class="card shadow-lg border-0">
     <div class="card-header bg-primary text-white text-center fw-bold">
       Income vs Expense Overview
@@ -44,44 +66,52 @@
 
 </div>
 
-<!-- Chart.js CDN -->
+<!-- ====================== End of Dashboard Container ====================== -->
+
+
+<!-- ====================== Chart.js Script ====================== -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+  // ---------- Get Canvas Context ----------
   const ctx = document.getElementById('financeChart').getContext('2d');
 
+  // ---------- Data from Flask (converted to JSON) ----------
   const labels = {{ labels|tojson }};
   const incomeData = {{ income_data|tojson }};
   const expenseData = {{ expense_data|tojson }};
 
+  // ---------- Initialize Chart ----------
   new Chart(ctx, {
-    type: 'bar',
+    type: 'bar',                                          // Bar chart type
     data: {
-      labels: labels,
+      labels: labels,                                     // X-axis labels (months or categories)
       datasets: [
         {
           label: 'Income',
           data: incomeData,
-          backgroundColor: 'rgba(2, 104, 45, 0.99)',
-          borderColor: 'rgba(2, 90, 49, 0.99)',
+          backgroundColor: 'rgba(5, 133, 54, 0.99)',    // Green bars
+          borderColor: 'rgba(4, 141, 72, 0.99)',
           borderWidth: 1
         },
         {
           label: 'Expense',
           data: expenseData,
-          backgroundColor: 'rgba(156, 28, 66, 1)',
+          backgroundColor: 'rgba(156, 28, 66, 1)',      // Red bars
           borderColor: 'rgba(131, 0, 109, 1)',
           borderWidth:1
         }
       ]
     },
+
+    // ---------- Chart Options ----------
     options: {
-      responsive: true,
+      responsive: true,                                   // Makes the chart responsive
       plugins: {
-        legend: { position: 'top' },
+        legend: { position: 'top' },                      // Position of the legend
         title: {
           display: true,
-          text: 'Monthly Financial Summary',
+          text: 'Monthly Financial Summary',              // Chart title
           font: { size: 16, weight: 'bold' }
         }
       },
@@ -93,12 +123,13 @@
           
         },
         y: {
-          beginAtZero: true,
+          beginAtZero: true,                               // Y-axis starts from zero
           ticks: { color: '#333', font: { weight: 'bold' } },
           grid: { color: 'rgba(0,0,0,0.1)' }
         }
       }
     }
   });
+  
 </script>
 {% endblock %}

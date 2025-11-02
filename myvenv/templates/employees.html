@@ -1,24 +1,43 @@
-<!-- templates/employees.html -->
+{# ====================== templates/employees.html ====================== #}
+
+{# -------------------------- Inheriting base.html layout -------------------------- #}
 {% extends "base.html" %}
 {% block content %}
+
+<!-- ======= Page Header Section ======= -->
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2>Employees</h2>
   <a class="btn btn-success" href="{{ url_for('employee_bp.add_employee') }}">+ Add Employee</a>
 </div>
 
+<!-- ======= Search Form Section ======= -->
 <form class="d-flex mb-3" method="get" action="{{ url_for('employee_bp.search_employee') }}">
   <input class="form-control me-2" type="search" name="q" placeholder="Search by name" value="{{ q if q else '' }}">
   <button class="btn btn-outline-primary">Search</button>
 </form>
 
+ <!-- ======= Employee Table Section ======= -->
 <table class="table table-striped table-hover">
-  <thead class="table-dark"><tr><th>ID</th><th>Name</th><th>Salary</th><th>Actions</th></tr></thead>
+
+<!-- ======= Table Header (Column Titles) ======= -->
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Salary</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
   <tbody>
+
+  <!-- ======= Table Body (Dynamic Employee Data) ======= -->
   {% for e in employees %}
     <tr>
       <td>{{ e.id }}</td>
       <td>{{ e.name }}</td>
       <td>{{ e.salary }}</td>
+
+        <!-- Action Buttons: Edit and Delete -->
       <td>
         <a class="btn btn-sm btn-warning" href="{{ url_for('edit',kind='employee', id=e.id) }}">Edit</a>
         <a class="btn btn-sm btn-danger" href="{{ url_for('employee_bp.delete_employee', id=e.id) }}" onclick="return confirm('Delete this employee?')">Delete</a>
@@ -31,3 +50,6 @@
 <br><br><br><br><br><br><br><br><br><br><br><br>
 
 {% endblock %}
+
+
+
